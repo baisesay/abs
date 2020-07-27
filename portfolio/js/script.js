@@ -27,6 +27,6 @@ sr.reveal('.skills_img', { delay: 400 })
 sr.reveal('.project_img', { interval: 200 })
 
 /**contact-section*/
-sr.reveal('.text-muted', { interval: 200 })
-sr.reveal('.table-details', { interval: 300 })
-sr.reveal('.form', { origin: 'bottom', delay: 500 })
+sr.reveal('.text-muted', {})
+sr.reveal('.table-details', {})
+sr.reveal('.form', {})
