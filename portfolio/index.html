@@ -185,7 +185,7 @@
                 </table>
 
 
-                <form action="form.php" class="form contact-form">
+                <form id="emailForm" class="form contact-form">
 
                     <div class="form-group">
                         <input type="text" placeholder="Name" name="name" id="name" class="form-control">
@@ -202,11 +202,11 @@
                     </div>
 
                     <div class="form-group">
-                        <textarea name="message" id="textarea" cols="0" rows="5" placeholder="Type your message here...." class="form-control"></textarea>
+                        <textarea name="message" id="message" cols="0" rows="5" placeholder="Type your message here...." class="form-control"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <button class="btn btn-success" name="submit">SEND</button>
+                        <button type="button" value="Send an Email" class="btn btn-success" name="submit" onclick="sendEmail()">SUBMIT</button>
                     </div>
                 </form>
 
@@ -253,6 +253,50 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/sweetalert2.all.min.js"></script>
     <script src="js/script.js"></script>
+
+    <script>
+        function sendEmail() {
+            var name = $("#name");
+            var email = $("#email");
+            var subject = $("#subject");
+            var message = $("#message");
+
+            if (isNotEmpty(name) && isNotEmpty(email) && isNotEmpty(subject) && isNotEmpty(message)) {
+                $.ajax({
+                    url: 'form.php',
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        name: name.val(),
+                        email: email.val(),
+                        subject: subject.val(),
+                        message: message.val()
+                    },
+                    success: function(response) {
+                        $("#emailForm")[0].reset();
+                        swal.fire({
+                            title: 'Message!',
+                            text: 'Message sent successfully',
+                            icon: 'success',
+
+                        })
+                    }
+                })
+            }
+        }
+
+        function isNotEmpty(caller) {
+            if (caller.val() == "") {
+                caller.css('border', '1px solid red');
+                return false;
+            } else {
+                caller.css('border', '');
+                return true;
+            }
+
+
+        }
+    </script>
 </body>
 
 </html>

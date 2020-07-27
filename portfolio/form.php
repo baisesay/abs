@@ -1,32 +1,45 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
 
-$name = $_REQUEST['name'];
-$email = $_REQUEST['email'];
-$subject = $_REQUEST['subject'];
-$message = $_REQUEST['message'];
+if(isset($_POST['name']) && isset($_POST['email'])){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
 
-if(empty($name) || empty($email) || empty($subject) || empty($message)){
+    require_once "PHPMailer/PHPMailer.php";
+    require_once "PHPMailer/SMTP.php";
+    require_once "PHPMailer/Exception.php";
 
-    echo"<script type='text/javascript'>
-    swal.fire(
-        'Required!',
-        'All the fields are required',
-        'error'
-    )
-    </script>";
+    $email = new PHPMailer();
+
+    $mail->isSMTP();
+    $mail->Host = "smtp.gmail.com";
+    $mail->SMTPAuth = true;
+    $mail->Username = "abdulaibais@gmail.com";
+    $mail->Password ='sepabs201992';
+    $mail->Port = 465;
+    $mail->SMTPSecure = "ssl";
+
+    $mail->isHTML(true);
+    $mail->setForm($mail, $name);
+    $mail->addAddress("abdulaibais@gmail.com");
+    $mail->Subject = ("$email ($subject)");
+    $mail->Body = $message;
+
+    if ($mail->send()) {
+        $status = "success";
+        $response = "Email is sent!";
+
+    }
+
+    else {
+        $status = "failed";
+        $response = "Something is wrong:<br>" .$email->ErrorInfo;
+    }
+    
+   exit(json_encode(array ("status" => $status, "response" => $response)));
 
 }
 
-else {
-    mail("abdulaibais@gmail.com", "webtech Message",$message, "From: $name <$email>");
 
-    echo"<script type='text/javascript'>
-    swal.fire(
-        'Message',
-        'Message sent successfully',
-        'success'
-    );
-    window.history.log(-1);
-    </script>";
-
-}
